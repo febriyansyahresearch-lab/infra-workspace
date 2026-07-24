@@ -1,6 +1,6 @@
 # Infra Workspace — Presales Infrastructure Toolkit
 
-**Febriyansyah** — Presales Specialist, PT. Citra Sentosa Solusindo
+**Febriyansyah** — Presales Specialist
 
 Infrastructure toolkit for presales demos, POCs, and client deployments.
 
