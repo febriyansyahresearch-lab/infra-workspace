@@ -1,6 +1,7 @@
 import os
 import json
 import base64
+import getpass
 from typing import Optional
 from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives import hashes
@@ -63,18 +64,19 @@ if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description="Encrypted secrets vault")
     parser.add_argument("action", choices=["init", "set", "get", "list"])
-    parser.add_argument("--password", required=True, help="Master password")
+    parser.add_argument("--password", help="Master password; prefer VAULT_PASSWORD or interactive prompt")
     parser.add_argument("--key", help="Secret key name")
     parser.add_argument("--value", help="Secret value")
     parser.add_argument("--file", default="vault.json", help="Vault file path")
     args = parser.parse_args()
+    master_password = args.password or os.getenv("VAULT_PASSWORD") or getpass.getpass("Master password: ")
 
     if args.action == "init":
-        v = Vault(args.password)
+        v = Vault(master_password)
         v.export(args.file)
         print(f"Vault initialized: {args.file}")
     elif args.action in ("set", "get", "list"):
-        v = Vault.import_vault(args.file, args.password)
+        v = Vault.import_vault(args.file, master_password)
         if args.action == "set":
             v.set(args.key, args.value)
             v.export(args.file)

@@ -20,7 +20,7 @@ def generate_web_stack(domain: str = "example.local") -> str:
             },
             "db": {
                 "image": "postgres:15-alpine",
-                "environment": ["POSTGRES_DB=appdb", "POSTGRES_USER=app", "POSTGRES_PASSWORD=changeme"],
+                "environment": ["POSTGRES_DB=appdb", "POSTGRES_USER=app", "POSTGRES_PASSWORD=${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}"],
                 "volumes": ["pgdata:/var/lib/postgresql/data"],
             },
         },
@@ -40,7 +40,7 @@ def generate_monitoring_stack() -> str:
             "grafana": {
                 "image": "grafana/grafana",
                 "ports": ["3000:3000"],
-                "environment": ["GF_SECURITY_ADMIN_PASSWORD=admin"],
+                "environment": ["GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:?set GRAFANA_ADMIN_PASSWORD}"],
                 "depends_on": ["prometheus"],
             },
             "node-exporter": {
